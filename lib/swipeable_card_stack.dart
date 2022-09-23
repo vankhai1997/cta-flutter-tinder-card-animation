@@ -37,8 +37,8 @@ class SwipeableCardsSection extends StatefulWidget {
     required this.items,
     this.onCardSwiped,
     this.cardWidthTopMul = 0.9,
-    this.cardWidthMiddleMul = 0.85,
-    this.cardWidthBottomMul = 0.8,
+    this.cardWidthMiddleMul = 0.9,
+    this.cardWidthBottomMul = 0.9,
     this.cardHeightTopMul = 0.6,
     this.cardHeightMiddleMul = 0.55,
     this.cardHeightBottomMul = 0.5,
@@ -46,12 +46,12 @@ class SwipeableCardsSection extends StatefulWidget {
     this.enableSwipeUp = true,
     this.enableSwipeDown = true,
   }) {
-    cardsSize[0] = Size(MediaQuery.of(context).size.width * cardWidthTopMul,
-        MediaQuery.of(context).size.height * cardHeightTopMul);
-    cardsSize[1] = Size(MediaQuery.of(context).size.width * cardWidthMiddleMul,
-        MediaQuery.of(context).size.height * cardHeightMiddleMul);
-    cardsSize[2] = Size(MediaQuery.of(context).size.width * cardWidthBottomMul,
-        MediaQuery.of(context).size.height * cardHeightBottomMul);
+    cardsSize[0] =
+        Size(MediaQuery.of(context).size.width * cardWidthTopMul, 160);
+    cardsSize[1] =
+        Size(MediaQuery.of(context).size.width * cardWidthMiddleMul, 170);
+    cardsSize[2] =
+        Size(MediaQuery.of(context).size.width * cardWidthBottomMul, 160);
   }
 
   @override
@@ -138,11 +138,34 @@ class _CardsSectionState extends State<SwipeableCardsSection>
   }
 
   @override
+  void didUpdateWidget(covariant SwipeableCardsSection oldWidget) {
+    final cardController = widget.cardController;
+    if (cardController != null) {
+      cardController.listener = _triggerSwipe;
+      cardController.addItem = _appendItem;
+      cardController.enableSwipeListener = _enableSwipe;
+    }
+    cards.clear();
+    // Init cards
+    setState(() {
+      for (cardsCounter = 0; cardsCounter < 3; cardsCounter++) {
+        if (widget.items.isNotEmpty && cardsCounter < widget.items.length) {
+          cards.add(widget.items[cardsCounter]);
+        } else {
+          cards.add(null);
+        }
+      }
+    });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
         child: IgnorePointer(
       ignoring: !enableSwipe,
       child: Stack(
+        alignment: Alignment.topCenter,
         children: <Widget>[
           if (cards[2] != null) backCard(),
           if (cards[1] != null) middleCard(),
@@ -203,7 +226,7 @@ class _CardsSectionState extends State<SwipeableCardsSection>
                     }
                   },
                 ))
-              : Container(),
+              : const SizedBox()
         ],
       ),
     ));

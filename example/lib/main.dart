@@ -29,6 +29,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int counter = 4;
+  final test = [
+    CardView(text: "First card"),
+    CardView(text: "Second card"),
+    CardView(text: "Third card"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -43,34 +48,38 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SwipeableCardsSection(
-            cardController: _cardController,
-            context: context,
-            //add the first 3 cards
-            items: [
-              CardView(text: "First card"),
-              CardView(text: "Second card"),
-              CardView(text: "Third card"),
-            ],
-            onCardSwiped: (dir, index, widget) {
-              //Add the next card
-              if (counter <= 20) {
-                _cardController.addItem(CardView(text: "Card $counter"));
-                counter++;
-              }
-
-              if (dir == Direction.left) {
-                print('onDisliked ${(widget as CardView).text} $index');
-              } else if (dir == Direction.right) {
-                print('onLiked ${(widget as CardView).text} $index');
-              } else if (dir == Direction.up) {
-                print('onUp ${(widget as CardView).text} $index');
-              } else if (dir == Direction.down) {
-                print('onDown ${(widget as CardView).text} $index');
-              }
-            },
-            enableSwipeUp: true,
-            enableSwipeDown: true,
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  test.insert(
+                    0,
+                    CardView(text: "4Third card"),
+                  );
+                });
+                print('======${test.length}');
+              },
+              child: Text('Theem')),
+          SizedBox(
+            height: 300,
+            child: Column(
+              children: [
+                SwipeableCardsSection(
+                  cardController: _cardController,
+                  context: context,
+                  //add the first 3 cards
+                  items: test,
+                  onCardSwiped: (dir, index, widget) {
+                    //Add the next card
+                    // if (counter <= 20) {
+                    //   _cardController.addItem(CardView(text: "Card $counter"));
+                    //   counter++;
+                    // }
+                  },
+                  enableSwipeUp: true,
+                  enableSwipeDown: true,
+                ),
+              ],
+            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
