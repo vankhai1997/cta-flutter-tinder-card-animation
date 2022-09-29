@@ -71,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   onCardSwiped: (dir, index, widget) {
                     //Add the next card
                     // if (counter <= 20) {
-                    //   _cardController.addItem(CardView(text: "Card $counter"));
-                    //   counter++;
+                    _cardController.addItem(CardView(text: "Card $counter"));
+                      counter++;
                     // }
                   },
                   enableSwipeUp: true,
