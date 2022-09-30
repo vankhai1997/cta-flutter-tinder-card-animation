@@ -7,10 +7,7 @@ import 'package:swipeable_card_stack/swipe_controller.dart';
 
 export './swipe_controller.dart';
 
-const List<Alignment> cardsAlign = [
-  Alignment(0.0, 1.0),
-  Alignment(0.0, 0.0)
-];
+const List<Alignment> cardsAlign = [Alignment(0.0, 1.0), Alignment(0.0, 0.0)];
 List<Size> cardsSize = List.filled(2, Size(1, 1));
 
 class SwipeableCardsSection extends StatefulWidget {
@@ -97,12 +94,6 @@ class _CardsSectionState extends State<SwipeableCardsSection>
     appendCard = newCard;
   }
 
-  void _enableSwipe(bool isSwipeEnabled) {
-    setState(() {
-      this.enableSwipe = isSwipeEnabled;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -111,7 +102,7 @@ class _CardsSectionState extends State<SwipeableCardsSection>
     if (cardController != null) {
       cardController.listener = _triggerSwipe;
       cardController.addItem = _appendItem;
-      cardController.enableSwipeListener = _enableSwipe;
+      enableSwipe = widget.items.length > 1;
     }
 
     // Init cards
@@ -140,11 +131,11 @@ class _CardsSectionState extends State<SwipeableCardsSection>
     if (cardController != null) {
       cardController.listener = _triggerSwipe;
       cardController.addItem = _appendItem;
-      cardController.enableSwipeListener = _enableSwipe;
     }
     cards.clear();
     // Init cards
     setState(() {
+      enableSwipe = widget.items.length > 1;
       for (cardsCounter = 0; cardsCounter < 2; cardsCounter++) {
         if (widget.items.isNotEmpty && cardsCounter < widget.items.length) {
           cards.add(widget.items[cardsCounter]);
@@ -271,7 +262,7 @@ class _CardsSectionState extends State<SwipeableCardsSection>
   void changeCardsOrder() {
     setState(() {
       // Swap cards (back card becomes the middle card; middle card becomes the front card)
-      cards[0] = cards[1]==null?cards[1]:cards[1];
+      cards[0] = cards[1] == null ? cards[1] : cards[1];
       // cards[1] = cards[2];
       cards[1] = appendCard;
       appendCard = null;
